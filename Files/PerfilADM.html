@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+	<link rel="stylesheet" type="text/css" href="PerfilADM.css">
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+	<script type="text/javascript">
+ $(document).ready(function()
+ { 
+	$.getJSON( "DespesaTipo.php", {} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			{
+				markup = "<tr><td>" + dados[i]["Codigo"] + "</td> + <td>" + dados[i]["Descricao"] + "</td></tr>";
+                $("table tbody").append(markup);
+			}
+            var tabela = document.getElementById("minhaTabela");
+	    var linhas = tabela.getElementsByTagName("tr");
+
+for(var i = 0; i < linhas.length; i++){
+	var linha = linhas[i];
+  linha.addEventListener("click", function(){
+  	//Adicionar ao atual
+		selLinha(this, false); //Selecione apenas um
+    //selLinha(this, true); //Selecione quantos quiser
+	});
+}
+
+/**
+Caso passe true, você pode selecionar multiplas linhas.
+Caso passe false, você só pode selecionar uma linha por vez.
+**/
+function selLinha(linha, multiplos){
+	if(!multiplos){
+  	var linhas = linha.parentElement.getElementsByTagName("tr");
+    for(var i = 0; i < linhas.length; i++){
+      var linha_ = linhas[i];
+      linha_.classList.remove("selecionado");    
+    }
+  }
+  linha.classList.toggle("selecionado");
+}
+ 		})
+    $('#bttcriar').click(function(e)
+ 	{ 
+ 	var nome = document.getElementsByName("despesa")[0].value;
+	if(nome != "" )
+	{
+		 		$.getJSON( "PerfilCriarDespesa.php", {nome:nome} ).done(function(dados) 
+		{
+                        alert("Criada com Sucesso")
+						location.reload(true)
+ 		})
+	}
+	else
+	alert("Insira a Despesa!!")	
+    })
+})
+ 	</script>
+
+
+</head>
+<body>
+	<label>Controlador de Despesas</label>
+	<form action="Profile.php" method="post">
+	<div class="main">
+	<input type="button" id="bttcriar" value="Criar"/> 
+	<input type="button" id="btteditar" value="Editar" />
+	<input type="button" id="bttdeletar" value="Deletar" />
+	<input type="text" id="despesa" name="despesa" placeholder="INSIRA UMA DESPESA">
+	<div id="table-wrapper">
+		<div id="table-scroll">
+		  <table id="minhaTabela">
+			  <thead>
+				  <tr>
+					  <th><span class="text">ID</span></th>
+					  <th><span class="text">Nome</span></th>
+				  </tr>
+			  </thead>
+			  <tbody>
+			  </tbody>
+		  </table>
+		</div>
+	  </div>
+</div>
+</form>
+</body>
+<script>
+	var tabela = document.getElementById("minhaTabela");
+	var btnVisualizar = document.getElementById("btteditar");
+	btnVisualizar.addEventListener("click", function(){
+	var selecionados = tabela.getElementsByClassName("selecionado");
+  	if(selecionados.length < 1){
+  	alert("Selecione pelo menos uma linha");
+    return false;
+  }
+  
+  var id = "";
+  var nome = "";
+  
+  	for(var i = 0; i < selecionados.length; i++){
+  	var selecionado = selecionados[i];
+    selecionado = selecionado.getElementsByTagName("td");
+    id = selecionado[0].innerHTML;
+	nome = document.getElementsByName("despesa")[0].value;
+  }
+	if(nome != "")
+	{
+		$.getJSON( "PerfilEditarDespesa.php", { id:id, nome:nome } ).done(function(dados) 
+		{
+			if (dados > 0)
+			{
+			 alert("Alterada!!")
+			 location.reload(true)
+			}
+			else
+				alert("Essa Despesa já foi registrada!!!")
+ 				
+ 		})
+	}
+	else
+	alert("Insira Um Novo Nome!!")
+});
+var btnVisualizar = document.getElementById("bttdeletar");
+
+	btnVisualizar.addEventListener("click", function(){
+	var selecionados = tabela.getElementsByClassName("selecionado");
+  	if(selecionados.length < 1){
+  	alert("Selecione pelo menos uma linha");
+    return false;
+  }
+  
+  var id = "";
+  var nome = "";
+  
+  	for(var i = 0; i < selecionados.length; i++){
+  	var selecionado = selecionados[i];
+    selecionado = selecionado.getElementsByTagName("td");
+    id = selecionado[0].innerHTML;
+  }
+		$.getJSON( "PerfilDeletarDespesa.php", {id:id} ).done(function(dados) 
+		{
+			if (dados == 1)
+			{
+			 alert("Deletada!!")
+			 location.reload(true)
+			}
+			else if( dados == 0)
+				alert("ALGO DEU ERRADO!!!")
+				
+			else if(dados == 3)
+			alert("Essa despesa Esta sendo usada")
+ 				
+ 		})
+});
+</script>
+</html>

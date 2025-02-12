@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+	<link rel="stylesheet" type="text/css" href="perfil.css">
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+	var CODIGO = "";
+	var count= 0;
+ 	$(document).ready(function()
+ 	{
+	//TABELA
+	$.getJSON( "Despesas.php", {} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			{
+				markup = "<tr class='semfiltro'><td>" + dados[i]["dCodigo"] + "</td> <td>" + dados[i]["Descricao"] + "</td> <td>" + dados[i]["dataPagamneto"] + "</td> <td>" + dados[i]["Valor"] + "</td></tr>";
+                $("table tbody").append(markup);
+				if(i==0)
+				CODIGO += dados[i]["dCodigo"];
+				else
+				CODIGO += ", " + dados[i]["dCodigo"];
+			}
+            var tabela = document.getElementById("minhaTabela");
+	    	var linhas = tabela.getElementsByTagName("tr");
+for(var i = 0; i < linhas.length; i++){
+	var linha = linhas[i];
+  linha.addEventListener("click", function(){
+		selLinha(this, false);
+	});
+}
+function selLinha(linha, multiplos){
+	if(!multiplos){
+  	var linhas = linha.parentElement.getElementsByTagName("tr");
+    for(var i = 0; i < linhas.length; i++){
+      var linha_ = linhas[i];
+      linha_.classList.remove("selecionado");    
+    }
+  }
+  linha.classList.toggle("selecionado");
+}
+})
+
+//SELECT
+	$.getJSON( "DespesaTipo.php", {} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			$('#despesas').append(new Option(dados[i][1], dados[i][0]))
+			for(i = 0; i < dados.length; i++)
+			$('#despesasfilt').append(new Option(dados[i][1], dados[i][0]))
+ 		})
+
+	$.getJSON( "Despesaex.php", {} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			$('#despesasex').append(new Option(dados[i][1], dados[i][0]))
+ 		})
+
+//DADOS DO USUARIO
+
+	$.getJSON( "Pessoa.php", {} ).done(function(dados) 
+		{
+			document.getElementsByName("cpf")[0].value = dados[0][0];
+    		document.getElementsByName("usuario")[0].value = dados[0][1];
+ 		})
+
+
+//CRIAR
+    $('#bttcriar').click(function(e)
+ 	{ 
+ 	var despesa = document.getElementsByName("despesas")[0].value;
+    var valor = document.getElementsByName("valor")[0].value;
+ 	var data = document.getElementsByName("data")[0].value;
+    var cpf = document.getElementsByName("cpf")[0].value;
+	if(despesa != "" && valor != "" && data != "" )
+	{
+		 		$.getJSON( "PerfilCriar.php", {despesa:despesa, valor:valor, data:data, cpf:cpf } ).done(function(dados) 
+		{
+			if (dados > 0)
+			{
+                alert("Criado com Sucesso")
+				location.reload(true)
+			}
+			else
+				alert("ALGO DEU ERRADO!!!")
+
+ 		})
+	}
+	else
+	alert("Insira os Valores!!")	
+    })
+
+
+//CRIAR DESPESAS EXCLUSIVAS
+	$('#bttcriarex').click(function(e)
+ 	{ 
+ 	var nome = document.getElementsByName("despesaex")[0].value;
+	if(nome != "" )
+	{
+		 		$.getJSON( "PerfilCriarDespesa.php", {nome:nome} ).done(function(dados) 
+		{
+						if(dados == 1)
+						{
+                        alert("Criada com Sucesso")
+						location.reload(true)
+						}
+						else if(dados == 0)
+						{
+						alert("Essa Despesa já Existe")
+						}
+ 		})
+	}
+	else
+	alert("Insira o Nome da sua Despesa Exclusiva!!")	
+    })
+
+
+//APAGAR DESPESAS EXCLUSIVAS
+	$('#bttdeletarex').click(function(e)
+ 	{ 
+ 	var id = document.getElementsByName("despesasex")[0].value;
+	if(id != "" )
+	{
+		 		$.getJSON( "PerfilDeletarDespesa.php", {id:id} ).done(function(dados) 
+		{
+			if(dados == 1)
+			{
+            	alert("Deletada com Sucesso")
+				location.reload(true)
+			}
+			else if(dados == 3)
+			alert("Essa despesa Esta sendo usada")
+
+ 		})
+	}
+	else
+	alert("Selecione uma despesa criada por você!!")	
+    })
+
+
+//FILTRO
+	$('#bttfiltrar').click(function(e)
+ 	{
+		CODIGO ="";
+		var inicial = document.getElementsByName("defiltro")[0].value;
+		var final = document.getElementsByName("atefiltro")[0].value;
+		var valor = document.getElementsByName("valorfilt")[0].value;
+		var valorfilt = document.getElementsByName("valortamanho")[0].value;
+		var despesa = document.getElementsByName("despesasfilt")[0].value;
+		if(inicial != "" || final != "" || valor != "" || despesa != "")
+		{
+			$(".semfiltro").remove();
+			$.getJSON( "DespesasFiltro.php", {inicial:inicial, final:final, valor: valor, despesa:despesa, valorfilt:valorfilt} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			{
+				markup = "<tr class='semfiltro'><td>" + dados[i]["dCodigo"] + "</td> <td>" + dados[i]["Descricao"] + "</td> <td>" + dados[i]["dataPagamneto"] + "</td> <td>" + dados[i]["Valor"] + "</td></tr>";
+                $("table tbody").append(markup);
+				if(i==0)
+				CODIGO += dados[i]["dCodigo"];
+				else
+				CODIGO += ", " + dados[i]["dCodigo"];
+			}
+			
+            var tabela = document.getElementById("minhaTabela");
+	    var linhas = tabela.getElementsByTagName("tr");
+
+for(var i = 0; i < linhas.length; i++){
+	var linha = linhas[i];
+  linha.addEventListener("click", function(){
+		selLinha(this, false);
+	});
+}
+function selLinha(linha, multiplos){
+	if(!multiplos){
+  	var linhas = linha.parentElement.getElementsByTagName("tr");
+    for(var i = 0; i < linhas.length; i++){
+      var linha_ = linhas[i];
+      linha_.classList.remove("selecionado");    
+    }
+  }
+  linha.classList.toggle("selecionado");
+}
+ 		})
+	$.getJSON( "DespesaTipo.php", {} ).done(function(dados) 
+		{
+			for(i = 0; i < dados.length; i++)
+			$('#despesas').append(new Option(dados[i][1], dados[i][0]))
+ 		})
+
+		 $.getJSON( "Pessoa.php", {} ).done(function(dados) 
+		{
+			document.getElementsByName("cpf")[0].value = dados[0][0];
+    		document.getElementsByName("usuario")[0].value = dados[0][1];
+ 		})
+		}
+		else
+		{
+		alert("Não foi escolhido nenhum filtro")
+		location.reload(true)
+		}
+    })
+
+
+//GRAFICO
+	$('#bttgrafico').click(function(e)
+{
+	if(count == 0)
+	{
+	alert('Clique Novamente Para Confimar!!');
+	count++;
+	}
+	var dado = CODIGO;
+	google.load('visualization', '1.0', {'packages':['corechart']});
+ 	$.getJSON( "GraficoSFILTRO.php", {dado:dado} ).done(function(dados) 
+{
+ google.setOnLoadCallback();
+ var data = new google.visualization.DataTable();
+ data.addColumn('string', 'Despesa');
+ data.addColumn('number', 'Quantidades');
+ data.addRows(dados);
+
+ var config = {
+ 'title':'Despesa',
+ 'width':500,
+ 'height':250,
+ 'backgroundColor': '#573b8a'
+ };
+
+ 	var chart=new google.visualization.PieChart(document.getElementById('teste2'));
+ 	chart.draw(data, config);
+ })
+})
+})
+ 	</script>
+
+
+</head>
+<body>
+	<div class="body">
+    <input name="cpf" type="text" value="" hidden>
+	<input name="usuario" type="text" value="" hidden>
+	<label>Controlador de Despesas</label>
+	<input type="button" id="bttgrafico" value="Mostrar Gráfico">
+	<form action="Profile.php" method="post">
+	</div>
+	<div class="main">
+
+			<div class="CriarD">
+			<input type="button" id="bttcriar" value="Criar"/> 
+			<input type="button" id="btteditar" value="Editar" />
+			<input type="button" id="bttdeletar" value="Deletar" />
+			<input type="text" name="valor" id="valor" placeholder="Valor">
+			<input type="date" class="data" name="data" id="data" maxlength="10" placeholder="DD-MM-AAAA">  
+			<select id="despesas"  name="despesas">
+			<option value=""></option>
+			</select>
+			<div id="table-wrapper">
+			<div id="table-scroll">
+			<table id="minhaTabela">
+			<thead>
+			<tr>
+			<th><span class="text">Codigo</span></th>
+			<th><span class="text">Despesa</span></th>
+			<th><span class="text">Data</span></th>
+			<th><span class="text">Valor</span></th>
+			</tr>
+			</thead>
+			<tbody id="teste">
+			</tbody>
+			</table>
+			</div>
+			</div>
+			</div>
+
+		<div class="Extra">
+		<div class="FiltroD">
+		<label id="filtro">Filtro</label>
+		<label>De</label> <input type="date" name="defiltro" id="data1filt"> <label>Até</label> <input type="date" name="atefiltro" id="data2filt">
+		<input type="text" name="valorfilt" id="valorfilt" placeholder="Valor">
+		<select id="valortamanho"  name="valortamanho">
+			<option value="Igual">Igual</option>
+			<option value="Maior">Maior</option>
+			<option value="Menor">Menor</option>
+			</select>
+		<select id="despesasfilt"  name="despesasfilt">
+		<option value=""></option>
+		</select>
+	
+		<input type="button" id="bttfiltrar" value="Filtrar" />
+		</div>
+
+		<div class="CriarEX">
+		<input type="text" name="despesaex" placeholder="Insira o nome da DespesaEX">
+		<select id="despesasex"  name="despesasex">
+		<option value=""></option>
+		</select>
+		<input type="button" id="bttcriarex" value="Criar DepesaEX">
+		<input type="button" id="bttdeletarex" value="Deletar DepesaEX">
+		</div>
+	</div>
+</div>
+<div id="teste2">
+</div>
+</form>
+</body>
+<script>
+$('#data').keypress(function()
+	{
+		const cpf = document.getElementById('data')
+		var cpfLeght = cpf.value.length
+		if(cpf.value >=0 || cpf.value == "-")
+		{
+			if(cpfLeght == 2 || cpfLeght == 5)
+   			cpf.value +='-'
+		}
+		else
+		cpf.value = null;
+	})
+var tabela = document.getElementById("minhaTabela");
+
+//EDITAR DESPESA
+var btnVisualizar = document.getElementById("btteditar");
+btnVisualizar.addEventListener("click", function(){
+	var selecionados = tabela.getElementsByClassName("selecionado");
+  	if(selecionados.length < 1){
+  	alert("Selecione pelo menos uma linha");
+    return false;
+  }
+  
+  var id = "";
+  var nome = "";
+  
+  	for(var i = 0; i < selecionados.length; i++){
+  	var selecionado = selecionados[i];
+    selecionado = selecionado.getElementsByTagName("td");
+    id = selecionado[0].innerHTML;
+    var despesa = document.getElementsByName("despesas")[0].value;
+    var valor = document.getElementsByName("valor")[0].value;
+ 	var data = document.getElementsByName("data")[0].value;
+  }
+  if(despesa != "" && valor != "" && data != "" )
+	{
+		$.getJSON( "PerfilEditar.php", { id:id, despesa:despesa, valor:valor, data:data } ).done(function(dados) 
+		{
+			if (dados > 0)
+			{
+			 alert("Alterado!!")
+			 location.reload(true)
+			}
+			else
+				alert("ALGO DEU ERRADO!!!")
+ 				
+ 		})
+	}
+	else
+	alert("Insira novos valores!")
+});
+
+//DELETAR DESPESA
+var btnVisualizar = document.getElementById("bttdeletar");
+btnVisualizar.addEventListener("click", function(){
+	var selecionados = tabela.getElementsByClassName("selecionado");
+  	if(selecionados.length < 1){
+  	alert("Selecione pelo menos uma linha");
+    return false;
+  }
+  
+    var id = "";  
+  	for(var i = 0; i < selecionados.length; i++){
+  	var selecionado = selecionados[i];
+    selecionado = selecionado.getElementsByTagName("td");
+    id = selecionado[0].innerHTML;
+  }
+		$.getJSON( "PerfilDeletar.php", {id:id} ).done(function(dados) 
+		{
+			if (dados > 0)
+			{
+			 alert("Deletada!!")
+			 location.reload(true)
+			}
+			else
+				alert("ALGO DEU ERRADO!!!")
+ 				
+ 		})
+});
+</script>
+</html>

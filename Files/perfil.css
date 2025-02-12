@@ -1,0 +1,270 @@
+#table-wrapper {
+    position:relative;
+  }
+  #table-scroll {
+    height: 300px;
+    overflow:auto;  
+    margin-top:20px;
+  }
+  #minhaTabela{
+    width:80%;
+    margin:0 auto;
+    border:0;
+    box-shadow: 0 5px 30px darkgrey;
+    border-spacing: 0;
+  
+  }
+  
+  #minhaTabela thead th{
+    font-weight: bold;
+    background-color: black;
+    color:white;
+    
+    padding:5px 10px;
+  }
+  
+  #minhaTabela tr td{
+    padding:5px 10px;
+    text-align: center;
+    
+    cursor: pointer; 
+  }
+  
+  #minhaTabela tr td:last-child{
+    text-align: right;
+  }
+  
+  
+  #minhaTabela tr:nth-child(odd){
+    background-color: #eee;
+  }
+  
+  #minhaTabela tr:hover td{
+    background-color: #feffb7;
+  }
+  
+  #minhaTabela tr.selecionado td{
+    background-color: #aff7ff;
+  }
+  
+  
+  button#visualizarDados{
+    background-color: white;
+    border: 1px solid black;
+    width:50%;
+    margin: 10px auto;
+    padding:10px 0;
+    display: block;
+    color: black;
+  }
+      body{
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    }
+    .main{
+      width: 750px;
+      height: 464px;
+      background: red;
+      overflow: hidden;
+      background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+      box-shadow: 5px 20px 50px #000;
+      display: flex;
+    }
+    .CriarD{
+      width: 375px;
+      height: 500px;
+      background: red;
+      overflow: hidden;
+      background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+      border: #573b8a;
+      border-style: solid;
+      padding: 15px;
+    }
+    .FiltroD{
+      width: 375px;
+      height: 250px;
+      background: red;
+      overflow: hidden;
+      background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+      border: #573b8a;
+      border-style: solid;
+      padding: 15px;
+    }
+    .CriarEX{
+      width: 375px;
+      height: 142px;
+      background: red;
+      overflow: hidden;
+      background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+      border: #573b8a;
+      border-style: solid;
+      padding: 15px;
+    }
+    #chk{
+      display: none;
+    }
+    .login{
+      position: relative;
+      width:100%;
+      height: 100%;
+    }
+    #filtro{
+      color: #fff;
+      font-size: 2.3em;
+      justify-content: center;
+      display: flex;
+    }
+    .body input[type='button']{
+      width: 97px;
+      height: 40px;
+      margin: 10px auto;
+      justify-content: center;
+      background: #573b8a;
+      font-size: 1em;
+      font-weight: bold;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      transition: .2s ease-in;
+  }
+    .FiltroD label{
+      color: #fff;
+      font-size: 1.5em;
+    }
+    .body label{
+      color: #fff;
+      font-size: 2.3em;
+      justify-content: center;
+      display: flex;
+    }
+    .CriarD input[type='button']{
+      width: 97px;
+      height: 40px;
+      margin: 10px auto;
+      justify-content: center;
+      background: #573b8a;
+      font-size: 1em;
+      font-weight: bold;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      transition: .2s ease-in;
+  }
+  .CriarD input[type='text'], input[type='date']{
+    width: 35%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+
+  .FiltroD input[type='text']{
+    width: 35%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+  .CriarEX input[type='text']{
+    width: 52%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+  #bttcriarex, #bttdeletarex{
+    width: 150px;
+    height: 40px;
+    margin: 15px;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+  #bttfiltrar
+  {
+    width: 150px;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+    display: flex;
+  }
+  .CriarD select{
+    width: 20%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+  .FiltroD select{
+    width: 27%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+  .CriarEX select{
+    width: 45%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+  }
+    input:hover{
+      background: #6d44b8;
+    }
+  
